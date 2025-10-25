@@ -1,5 +1,4 @@
 name: tests
-
 on:
   push:
     branches: [ "**" ]
@@ -10,45 +9,24 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix:
-        php: ['8.3', '8.4']
+      matrix: { php: ['8.3','8.4'] }
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           extensions: mbstring, dom, pdo, sqlite, pdo_sqlite
           coverage: pcov
-
-      - name: Cache Composer
-        uses: actions/cache@v4
+      - uses: actions/cache@v4
         with:
           path: vendor
           key: composer-${{ runner.os }}-${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            composer-${{ runner.os }}-${{ matrix.php }}-
-
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
-
-      - name: App key (Laravel needs it)
-        run: php artisan key:generate
-
-      - name: Prepare storage
-        run: |
-          mkdir -p storage/framework/{cache,testing,views}
-          mkdir -p build/logs
-
-      - name: Run tests with coverage
-        run: |
-          php artisan test --coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml
-
-      - name: Upload coverage artifact
-        uses: actions/upload-artifact@v4
+      - run: composer install --prefer-dist --no-progress
+      - run: php artisan key:generate
+      - run: mkdir -p build/logs
+      - run: php artisan test --coverage-clover build/logs/clover.xml
+      - uses: actions/upload-artifact@v4
         with:
           name: coverage-${{ matrix.php }}
           path: build/logs/
