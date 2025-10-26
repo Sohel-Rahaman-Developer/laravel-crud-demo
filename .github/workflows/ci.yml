@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: pcov
+          extensions: sqlite, pdo_sqlite
+          tools: composer:v2
+
+      - name: Composer install (no dev cache issues)
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      # Optional: cache vendor (speeds up builds)
+      - name: Cache Composer files
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: App key (some packages expect it)
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"; php artisan key:generate
+
+      - name: Run PHPUnit (with coverage)
+        run: php artisan test --coverage-clover build/coverage.xml
+
+      - name: Upload coverage artifact (downloadable)
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-xml
+          path: build/coverage.xml
+
+  phpstan:
+    runs-on: ubuntu-latest
+    needs: tests   # optional: wait for tests, ya parallel bhi kar sakte ho
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          tools: composer:v2
+
+      - name: Install deps
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse --no-progress

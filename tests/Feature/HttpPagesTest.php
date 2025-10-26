@@ -39,6 +39,7 @@ class HttpPagesTest extends TestCase
     #[Test]
     public function edit_page_for_existing_post_loads_and_contains_livewire_component(): void
     {
+        /** @var \App\Models\Post $post */
         $post = Post::factory()->create(['title' => 'Edit Me']);
 
         $this->get("/posts/{$post->id}/edit")

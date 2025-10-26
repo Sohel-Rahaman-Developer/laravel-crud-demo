@@ -27,6 +27,7 @@ class PostEditTest extends TestCase
     #[Test]
     public function can_update_post(): void
     {
+        /** @var \App\Models\Post $post */
         $post = Post::factory()->create(['title' => 'Old Title', 'content' => 'Old']);
 
         Livewire::test(Edit::class, ['post' => $post]) // <-- pass MODEL
@@ -46,6 +47,7 @@ class PostEditTest extends TestCase
     #[Test]
     public function can_delete_post_and_redirects_to_index(): void
     {
+        /** @var \App\Models\Post $post */
         $post = Post::factory()->create();
 
         Livewire::test(Edit::class, ['post' => $post]) // <-- pass MODEL

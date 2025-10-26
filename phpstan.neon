@@ -1,0 +1,16 @@
+parameters:
+  paths:
+    - app
+    - database/factories
+    - tests
+
+  level: 5
+  tmpDir: build/phpstan
+
+  # optional quality toggles that v2 me valid hain:
+  reportUnmatchedIgnoredErrors: true
+  tipsOfTheDay: false
+
+  # agar Laravel magic pe false positives aayein to selectively ignore kar sakte ho:
+  ignoreErrors:
+    - '#Call to an undefined method Illuminate\\.*#'

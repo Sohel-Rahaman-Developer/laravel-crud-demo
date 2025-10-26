@@ -34,7 +34,8 @@ class Index extends Component
     {
         $validated = $this->validate();
 
-        Post::create($validated);
+        // Post::create($validated);
+        Post::query()->create($validated);
 
         $this->reset(['title', 'content']);
 
