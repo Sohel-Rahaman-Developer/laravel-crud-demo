@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.0/phpunit.xsd"
+    colors="true"
+    bootstrap="vendor/autoload.php"
+    cacheResult="true"
+    cacheDirectory=".phpunit.cache"
+    backupGlobals="false"
+    backupStaticProperties="false"
+    failOnWarning="true"
+    failOnRisky="true"
+    failOnEmptyTestSuite="false"
+>
+    <testsuites>
+        <testsuite name="Browser">
+            <directory>tests/Browser</directory>
+        </testsuite>
+    </testsuites>
+
+    <source>
+        <include>
+            <directory suffix=".php">app</directory>
+        </include>
+        <exclude>
+            <directory>vendor</directory>
+            <directory>storage</directory>
+            <directory>bootstrap</directory>
+        </exclude>
+    </source>
+
+<php>
+  <env name="APP_ENV" value="dusk"/>
+  <env name="APP_URL" value="http://127.0.0.1:8000"/>
+
+  <env name="DB_CONNECTION" value="sqlite"/>
+  <env name="DB_DATABASE" value="C:/php/livewire-crud-demo/database/database.sqlite"/>
+
+  <env name="SESSION_DRIVER" value="file"/>
+  <env name="CACHE_STORE" value="file"/>
+  <env name="QUEUE_CONNECTION" value="sync"/>
+  <env name="APP_KEY" value="base64:1PdFH59c67oMpFLd8OsOlkXdRIHFmXqgijYCltB9QKU="/>
+</php>
+
+</phpunit>

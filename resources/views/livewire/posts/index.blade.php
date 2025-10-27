@@ -1,3 +1,4 @@
+{{-- resources/views/livewire/posts/index.blade.php --}}
 <div class="container py-4">
     <div class="row justify-content-center">
         <div class="col-lg-10">
@@ -11,9 +12,10 @@
                         class="form-control"
                         placeholder="Search title/content..."
                         wire:model.live.debounce.300ms="search"
+                        dusk="search"
                         style="min-width: 260px;"
                     />
-                    <select class="form-select" wire:model.live="perPage" style="width: 110px;">
+                    <select class="form-select" wire:model.live="perPage" dusk="perPage" style="width: 110px;">
                         <option value="5">5 / page</option>
                         <option value="10">10 / page</option>
                         <option value="15">15 / page</option>
@@ -21,7 +23,6 @@
                 </div>
             </div>
 
-            {{-- Create Form --}}
             <div class="card shadow-sm mb-4">
                 <div class="card-body">
                     <h2 class="h5 mb-3">Create Post</h2>
@@ -29,18 +30,18 @@
                     <form wire:submit.prevent="save" class="row g-3">
                         <div class="col-12">
                             <label class="form-label">Title <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" wire:model.defer="title" placeholder="Post title" />
+                            <input type="text" class="form-control" wire:model.defer="title" placeholder="Post title" dusk="title" />
                             @error('title') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                         </div>
 
                         <div class="col-12">
                             <label class="form-label">Content</label>
-                            <textarea class="form-control" rows="3" wire:model.defer="content" placeholder="Optional description..."></textarea>
+                            <textarea class="form-control" rows="3" wire:model.defer="content" placeholder="Optional description..." dusk="content"></textarea>
                             @error('content') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                         </div>
 
                         <div class="col-12">
-                            <button class="btn btn-primary" type="submit" wire:loading.attr="disabled">
+                            <button class="btn btn-primary" type="submit" dusk="add-post" wire:loading.attr="disabled">
                                 <span wire:loading.remove>Add Post</span>
                                 <span wire:loading>Saving...</span>
                             </button>
@@ -49,7 +50,6 @@
                 </div>
             </div>
 
-            {{-- List --}}
             <div class="card shadow-sm">
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -64,14 +64,16 @@
                             </thead>
                             <tbody>
                                 @forelse ($posts as $post)
-                                    <tr>
+                                    <tr wire:key="post-{{ $post->id }}" dusk="row-{{ $post->id }}">
                                         <td>{{ $post->id }}</td>
                                         <td class="fw-semibold">{{ $post->title }}</td>
                                         <td class="text-muted">
                                             {{ \Illuminate\Support\Str::limit($post->content, 80) }}
                                         </td>
                                         <td>
-                                            <a href="{{ route('posts.edit', $post) }}" class="btn btn-sm btn-outline-primary">
+                                            <a href="{{ route('posts.edit', $post) }}"
+                                               class="btn btn-sm btn-outline-primary"
+                                               dusk="edit-{{ $post->id }}">
                                                 Edit
                                             </a>
                                         </td>
@@ -88,7 +90,6 @@
                     </div>
 
                     <div class="p-3">
-                        {{-- Bootstrap 5 pagination --}}
                         {{ $posts->onEachSide(1)->links() }}
                     </div>
                 </div>

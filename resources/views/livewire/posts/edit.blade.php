@@ -12,24 +12,25 @@
                     <form wire:submit.prevent="update" class="row g-3">
                         <div class="col-12">
                             <label class="form-label">Title <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" wire:model.defer="title" />
+                            <input type="text" class="form-control" wire:model.defer="title" dusk="title" />
                             @error('title') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                         </div>
 
                         <div class="col-12">
                             <label class="form-label">Content</label>
-                            <textarea class="form-control" rows="5" wire:model.defer="content"></textarea>
+                            <textarea class="form-control" rows="5" wire:model.defer="content" dusk="content"></textarea>
                             @error('content') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                         </div>
 
                         <div class="col-12 d-flex gap-2">
-                            <button class="btn btn-primary" type="submit" wire:loading.attr="disabled">
-                                <span wire:loading.remove>Save Changes</span>
+                            <button class="btn btn-primary" type="submit" wire:loading.attr="disabled" dusk="save-post">
+                                <span wire:loading.remove>Save</span>
                                 <span wire:loading>Saving...</span>
                             </button>
 
                             <button type="button" class="btn btn-outline-danger"
                                     wire:click="delete"
+                                    dusk="delete-post"
                                     wire:confirm="Delete this post?">
                                 Delete
                             </button>

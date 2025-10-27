@@ -32,6 +32,9 @@ class Edit extends Component
         $this->post->update($validated);
 
         $this->dispatch('notify', message: 'Post updated successfully.', variant: 'success');
+
+        // ✅ Dusk expects redirect back to index after Save
+        $this->redirectRoute('posts.index', navigate: true);
     }
 
     public function delete(): void

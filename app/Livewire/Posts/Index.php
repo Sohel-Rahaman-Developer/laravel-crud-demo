@@ -34,21 +34,18 @@ class Index extends Component
     {
         $validated = $this->validate();
 
-        // Post::create($validated);
         Post::query()->create($validated);
 
         $this->reset(['title', 'content']);
 
-        // toast (browser event)
         $this->dispatch('notify', message: 'Post created successfully.', variant: 'success');
 
-        // Re-render with first page to show fresh data if needed
         $this->resetPage();
     }
 
-public function render()
+    public function render()
     {
-        $keyword = trim($this->search ?? ''); // <-- IMPORTANT
+        $keyword = trim($this->search ?? '');
 
         $posts = Post::query()
             ->when($keyword !== '', function ($q) use ($keyword) {
